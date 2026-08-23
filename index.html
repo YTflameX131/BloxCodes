@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<head>
+<title> BloxCodes</title>
+<link rel="icon" type="image/png" href="https://iili.io/CitPKI1.webp">
+</head>
+<textarea class="YTarea"readonly>
+    //warning: These are Unoffical Ranks!!
+//code by YTflameX
+// plz subscribe me so soon i can get orginal one soon :D
+ api.setTargetedPlayerSettingForEveryone(myId, "nameTagInfo", {
+    content: [
+        {str:"[", style:{color:"#FFFFFF"}},
+        {str:"🔧", style:{color:"#FFFFFF"}},
+        {str:"]", style:{color:"#FFFFFF"}},
+        {str:"[", style:{color:"#FFFFFF"}},
+        {str:"▶Y", style:{color:"#FFFFFF"}},
+        {str:"T", style:{color:"#FE0000"}},
+        {str:"]", style:{color:"#FFFFFF"}},
+        {str:"[⚡]", style:{color:"#FFCC00"}},
+        {str:"YTflameX131", style:{color:"white"}}
+    ],
+    backgroundColor: "#22283b"
+}, true);
+
+
+function onPlayerChat(id, msg) {
+//code made by DracoDev_YT and YTflameX131    
+let name = api.getEntityName(id);
+
+    if (name === "YTflameX131") {
+        api.broadcastMessage([
+            {str: "[", style: {color: "White"}},
+            {icon: "wrench", style: {color: "White"}},
+            {str: "Dev", style: {color: "#CEF3FF"}},
+            {str: "] ", style: {color: "#CEF3FF"}},
+            {str: "[", style: {color: "#CEF3FF"}},
+            {icon: "youtube", style: {color: "#FE0000"}},
+            {str: "You", style: {color: "#FFFFFF"}},
+            {str: "Tuber", style: {color: "#FE0000"}},
+            {str: "] ", style: {color: "#CEF3FF"}},
+            {str: "[", style: {color: "#FFCC00"}},
+            {icon: "zap", style: {color: "#FFCC00"}},
+            {str: "Super] ", style: {color: "#FFCC00"}},
+            {str: "YTflameX131:", style: {color: "Orange"}},
+            {str: " " + msg, style: {color: "white"}}
+        ]);
+        return false;
+    }
+}
+</textarea>
+<textarea class="anArea"readonly>
+    let lastAnnouncement = null;
+
+playerCommand = (id, msg) => {
+    const playerName = api.getEntityName(id);
+    const admins = ["YTflameX131", "Aura_c", "ItsBob", "x_Drxth"];
+
+    if (!admins.includes(playerName)) return false;
+
+    msg = msg.trim();
+    if (!msg) return false;
+
+    let parts = msg.split(" ");
+    let command = parts[0].toLowerCase();
+    if (command.startsWith("/")) command = command.slice(1);
+    const args = parts.slice(1);
+
+    if (command === "sa") {
+        if (!args.length) {
+            api.sendMessage(id, "⚠ Usage: /sa <message>", { color: "orange" });
+            return true;
+        }
+
+        const announcement = args.join(" ");
+        lastAnnouncement = announcement;
+
+        api.getPlayerIds().forEach(pid => {
+            api.sendTopRightHelper(pid, "user-group-crown", "Server Announcement: " + announcement, {
+                duration: 6,
+                width: 300,
+                height: 110,
+                color: "#21273c",
+                iconSizeMult: 3.5,
+                textAndIconColor: "#FFFFFF",
+                fontSize: "15px"
+            });
+            api.playSound(pid, "harp_pling", 1, 1); // sound effect
+        });
+
+        api.log(`Server announcement sent by ${playerName}: ${announcement}`);
+        return true;
+    }
+
+    return false;
+};
+
+onPlayerJoin = (id) => {
+    if (!lastAnnouncement) return;
+    api.sendTopRightHelper(id, "user-group-crown", "Server Announcement: " + lastAnnouncement, {
+        duration: 6,
+        width: 300,
+        height: 110,
+        color: "#21273c",
+        iconSizeMult: 3.5,
+        textAndIconColor: "#FFFFFF",
+        fontSize: "15px"
+    });
+    api.playSound(id, "bass", 1, 1); // sound effect for new player
+};
+</textarea>
+<textarea class="nameArea"readonly>
+//code by YTflameX131 //
+const DISCO_COLORS = ["white","yellow","pink","cyan","lime","red","blue","purple"];
+const RAINBOW_COLORS = ["red","orange","yellow","lime","green","cyan","blue","purple","pink"];
+
+let mode = null, idx = {}, tickCount = 0;
+
+onPlayerChat = (id, msg) => {
+  msg = msg.trim().toLowerCase();
+
+  if (msg === "!disco") {
+    mode = "disco";
+    idx = {};
+    tickCount = 0;
+    api.sendMessage(id, [
+      { str: "🕺 Disco name mode ON", style: { fontWeight: "bold" } }
+    ]);
+    return false;
+  }
+//plz make sure to subscribe!//
+  if (msg === "!rainbow") {
+    mode = "rainbow";
+    idx = {};
+    tickCount = 0;
+    api.sendMessage(id, [
+      { str: "🌈 Rainbow name mode ON", style: { fontWeight: "bold" } }
+    ]);
+    return false;
+  }
+
+  if (msg === "!stop" || msg === "!off") {
+    mode = null;
+    api.sendMessage(id, [
+      { str: "Name color effects stopped", style: { fontWeight: "bold" } }
+    ]);
+    for (let p of api.getPlayerIds()) {
+      api.setTargetedPlayerSettingForEveryone(p, "nameColour", "null", true);
+    }
+    return false;
+  }
+};
+//checkout YTflameX On yt //
+tick = () => {
+  if (!mode) return;
+
+  const players = api.getPlayerIds();
+
+  if (mode === "disco") {
+    const c = DISCO_COLORS[Math.random() * DISCO_COLORS.length | 0];
+    for (let p of players) {
+      api.setTargetedPlayerSettingForEveryone(p, "nameColour", c, true);
+    }
+  }
+
+  if (mode === "rainbow" && ++tickCount % 2 === 0) {
+    for (let p of players) {
+      idx[p] = (idx[p] || 0) + 1;
+      api.setTargetedPlayerSettingForEveryone(
+        p,
+        "nameColour",
+        RAINBOW_COLORS[idx[p] % RAINBOW_COLORS.length],
+        true
+      );
+    }
+  }
+};
+
+</textarea>
+<textarea class="secretArea"readonly>
+    api.setClientOption(myId,"showChatBubbles",true);
+</textarea>
+<textarea class="lampArea"readonly>
+    
+/* Code Made By YTflameX, this is licensed to use anywhere, but not to copy it or make a video on it without crediting the code owner */
+let light={};let pos={};let processed={};let placed={}; let playerTiming={};let delay=500; /* in m/s */
+removeRGB = function(id) {
+    api.setBlock(...pos[id],"Air");delete pos[id]; api.deleteEntity(light[id]);delete light[id];delete placed[id];delete processed[id]
+}
+let lights = [ 
+    "Invisible Red Light",       
+    "Invisible Orange Light",    
+    "Invisible Yellow Light",   
+    "Invisible Lime Light",      
+    "Invisible Green Light",     
+    "Invisible Light Blue Light",
+    "Invisible Blue Light",     
+    "Invisible Purple Light",   
+    "Invisible Pink Light",     
+    "Invisible Magenta Light",   
+    "Invisible White Light"      
+];
+onPlayerJoin = function(pId) {
+    api.setClientOption(pId,"lightingOverride",true);
+    api.sendMessage(pId,[{str:"Welcome TO RGB Lamp System!\n",style:{color:"lime",fontWeight:"bold"}},{str:"Use the RGB Lamp Placer to place the RGB Lamp!\n",style:{color:"orange",fontWeight:"bold"}},{str:"Use RGB Lamp Remover to remove the last placed RGB Lamp!\n",style:{color:"cyan",fontWeight:"bold"}},{str:"💡 Lightning has been enabled for the RGB Lamp!\n",style:{color:"magenta",fontWeight:"bold"}},{str:"Please make sure to subscribe to @YTflameX on youtube!\n",style:{color:"tomato",fontWeight:"bold"}},{str:`I hope you liked it, ${api.getEntityName(pId)}!`,style:{color:"yellow",fontWeight:"bold"}}])
+    light[pId]=true;pos[pId]=true;
+    api.clearInventory(pId);api.giveItem(pId,"Stick",1,{customDisplayName:"RGB Lamp Placer"});api.giveItem(pId,"Bone",1,{customDisplayName:"RGB Lamp Remover"})
+}
+onPlayerClick = function(pId,alt,x,y,z) {
+    if (api.getHeldItem(pId)?.attributes?.customDisplayName==="RGB Lamp Placer") {
+        if (x&&y&&z===NaN)return;
+        let ids=api.attemptCreateMeshEntity("BloxdBlock",{blockName:"Torch",size:0.75});api.setPosition(ids,x+0.5,y+0.5,z+0.5);pos[pId]=[x+0.5,y+1,z+0.5];light[pId]=ids;;placed[pId]=pId;processed[pId]=0;playerTiming[pId]=api.now();api.sendMessage(pId,`Placed RGB Lamp at ${pos[pId]}! Enjoy!`,{color:"lime",fontWeight:"bold"})
+    }
+    if (api.getHeldItem(pId)?.attributes?.customDisplayName==="RGB Lamp Remover") {
+        if (light[pId]===true) {api.sendMessage(pId,"You have not placed any RGB Lamps Yet!",{color:"tomato",fontWeight:"Bold"});return}
+        if (light[pId] !==true && light[pId]!==null||undefined) {
+            api.sendMessage(pId,`Cleared RGB Lamp "${light[pId]}"!`,{color:"lime",fontWeight:"bold"});removeRGB(pId);processed[pId]=0;playerTiming[pId]=api.now()
+        }
+    }
+}
+tick = function(pId) {
+    for (let p in placed) {
+        if (api.now()-playerTiming[p]>=delay) {
+            if (processed[p]>=0){processed[p]++;}
+            if (processed[p]===11){processed[p]=0;}
+            playerTiming[p]=api.now();api.setBlock(pos[p],lights[processed[p]])
+        }
+    }
+}
+</textarea>
+<textarea class="morphArea"readonly>
+    let entityAttach={};
+onPlayerJoin = function(pId){api.clearInventory(pId);api.giveItem(pId,"Stick",1,{customDisplayName:"Clear All",customDescription:"Click to remove all mobs and restore back to a humanoid"})};onPlayerDamagingMob = function(pId,mobId) {if (entityAttach[pId]===mobId){return "preventDamage"}if(entityAttach[pId]){api.sendMessage(pId,"You have mob attached to yourself!",{color:"tomato",fontWeight:"bold"});return "preventDamage"}api.addFollowingEntityToPlayer(pId,mobId,[0,0,0],true);api.setOtherEntitySetting(pId,pId,"canSee",false);entityAttach[pId]=mobId;api.sendMessage(pId,`Added Entity ${entityAttach[pId]}`,{color:"orange",fontWeight:"bold"})
+};onPlayerClick = function(pId,alt,x,y,z,bn,ti) {
+if(!api.getHeldItem(pId))return;if (api.getHeldItem(pId)?.attributes?.customDisplayName==="Clear All") {if (!entityAttach[pId]){api.sendMessage(pId,"You have no Mobs Attached!",{color:"tomato",fontWeight:"bold"})}if(entityAttach[pId]) {api.sendMessage(pId,`Cleared mob ${entityAttach[pId]} & transformed back to humanoid`,{color:"lime",fontWeight:"bold"});api.despawnMob(entityAttach[pId]);api.setOtherEntitySetting(pId,pId,"canSee",true);delete entityAttach[pId]}}};onMobDamagingPlayer = function(mId,pId){if (entityAttach[pId]===mId)return "preventDamage"}
+</textarea>
+<textarea class="bombArea" readonly>
+    let time=null;let entity=null;let started=false;let lobbyNow=api.now(); let hasTimer=false;let pos=null;let id=null;let maxVal=0; let color="lime"
+function createExplosion(pId) {let [x, y, z] = pos;
+api.attemptCreateThrowable(pId,"Super RPG",[x, y + 0.2, z],[0, -1, 0],50000,90,1);}
+onPlayerJoin = (pId) => {
+    api.setMaxPlayers(1,1);api.sendMessage(pId,"Warning ⚠This only works for a single player, if more than a player use the explosion then, it may break the code",{color:"tomato",fontWeight:"bold"})
+    api.clearInventory(pId);api.giveItem(pId,"Timed Spike Bomb",1,{customDisplayName:"Time Bomb Placer"})
+}
+onPlayerFinishChargingItem = (pId,a,item,ms) => {
+    if (item==="Timed Spike Bomb|meta|charging4"&& ms>=2000) {
+let playerCam = api.getPlayerTargetInfo(pId)
+        if (!playerCam) throw new Error("You can't place time bomb in the air!");
+        if (playerCam){let [x,y,z]=playerCam?.position;api.setBlock(x,y+1,z,"Timed Spike Bomb Block");api.sendMessage(pId,"Sucessfully placed time Bomb💣! Now type the time in the timer tag & click the Time Bomb with the given timer Tag!(in Seconds)",{color:"lime",fontWeight:"bold"});api.removeItemName(pId,"Timed Spike Bomb|meta|charging4",999);
+                      let ent=api.attemptCreateMeshEntity("Box",{width:0,height:1,depth:0},"Timed Spiked Bomb");api.setPosition(ent,x+0.5,y+1,z+0.5);entity=ent;api.giveItem(pId,"Name Tag",1,{customDisplayName:"Timer Tag"});started=true;pos=[x+0.5,y+1,z+0.5];id=pId}
+    }
+}
+onPlayerClick = (pId,alt,x,y,z,bn) =>{
+if (hasTimer===false&&api.getHeldItem(pId)?.name==="Name Tag"&&bn==="Timed Spike Bomb Block"&&started===true) {
+    if (api.getHeldItem(pId)?.attributes?.customAttributes?.text) {
+        let str = api.getHeldItem(pId)?.attributes?.customAttributes?.text
+        if (/^\d+$/.test(str)) {
+    hasTimer=true;lobbyNow=api.now();started=true;time=Number(str)+1; api.sendMessage(pId,`The Timer Bomb Has Started! It will explode💥 in next ${str} seconds!`,{color:"tomato",fontWeight:"bold"});api.removeItemName(pId,"Name Tag",999);maxVal=Number(str)
+} else {
+api.sendMessage(pId,"Please Type Numbers in the timer!",{color:"red",fontWeight:"bold"})
+}
+    }
+}
+}
+tick = function() {
+    if (hasTimer===true) {
+    if (api.now()-lobbyNow>=1000) {
+let percent = (time / maxVal) * 100;
+if(percent > 75){color="lime"}else if(percent > 50){color="yellow"}else if(percent > 25){color="orange"}else if(percent > 0){color="red"}
+if (time===0){hasTimer=false;;started=false;time=null;createExplosion(id);api.deleteMeshEntity(entity);entity=null;api.giveItem(id,"Timed Spike Bomb",1,{customDisplayName:"Time Bomb Placer"});id=null;api.broadcastMessage("💣The bomb has Exploded💥!",{color:"tomato",fontWeight:"bold"});return;}
+            time--;lobbyNow=api.now();api.setTargetedPlayerSettingForEveryone(entity,"nameTagInfo",{content:[{str: `${time}s`}],backgroundColor:color})
+        }
+    }
+}
+</textarea>
+<textarea class="monitorArea" readonly>
+    let screenMain;let position;let screenP=false;let pNow=api.now()
+onPlayerJoin = function(pId) {
+    api.clearInventory(pId)
+    api.giveItem(pId,"Bone",1,{customDisplayName:"Monitor Placer"})
+}
+function randomColor() {
+let r = Math.floor(Math.random() * 256);let g = Math.floor(Math.random() * 256);let b = Math.floor(Math.random() * 256);
+return [r, g, b, 1];
+}
+onPlayerClick = function(pId,alt,x,y,z) {
+let cam = api.getPlayerFacingInfo(pId).camPos;
+let side1 = cam[0] - (x + 0.5);
+let side2 = cam[2] - (z + 0.5);
+let yaw = Math.atan2(side1, side2);
+yaw = Math.round(yaw / (Math.PI / 2)) * (Math.PI / 2);
+if (api.getHeldItem(pId)?.attributes?.customDisplayName==="Monitor Placer"){
+        let base = api.attemptCreateMeshEntity("Box",{width:1,depth:0.5,height:0.1,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+        let stick = api.attemptCreateMeshEntity("Box",{width:0.15,depth:0.15,height:0.5,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+        api.addFollowingEntityToPlayer(base,stick,[0,0,0]);api.setPosition(base,x+0.5,y+1,z+0.5)
+        let screen = api.attemptCreateMeshEntity("Box",{width:1.75,height:1,depth:0.1,emissiveColor:[0,0,0],diffuseColor:[0,0,0]});
+        let rod1 = api.attemptCreateMeshEntity("Box",{width:0.075,height:1,depth:0.1,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+        let rod2 = api.attemptCreateMeshEntity("Box",{width:0.075,height:1,depth:0.1,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+         let rod3 = api.attemptCreateMeshEntity("Box",{width:1.9,height:0.075,depth:0.1,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+         let rod4 = api.attemptCreateMeshEntity("Box",{width:1.9,height:0.075,depth:0.1,emissiveColor:[255, 255, 255, 1],diffuseColor:[255, 255, 255, 1]});
+        api.addFollowingEntityToPlayer(base,screen,[0,0.5,0]);screenMain=screen;position=[x+0.5,y+1,z+0.5];screenP=true;api.sendMessage(pId,`🖥 Monitor sucessfully placed at ${[x+0.5,y+1,z+0.5]}!`,{color:"lime",fontWeight:"bold"});api.setEntityRotation(base, 0, yaw, 0);
+        let rows=[base,stick,screen,rod1,rod2,rod3,rod4];for (let ab of rows){api.setEntityRotation(ab, 0, yaw, 0)};pNow=api.now();let dist = 0.912;
+let offX = Math.cos(yaw) * dist;let offZ = -Math.sin(yaw) * dist;api.addFollowingEntityToPlayer(base, rod1, [offX, 0.5, offZ]);api.addFollowingEntityToPlayer(base, rod2, [-offX, 0.5, -offZ]);api.addFollowingEntityToPlayer(base, rod3, [0, 1.5, 0]);
+api.addFollowingEntityToPlayer(base, rod4, [0, 0.425, 0]);;
+        
+    }}
+tick = function(pId) {
+    if (api.now()-pNow>=1000&&screenP===true) {
+    api.updateMeshEntity(screenMain,"Box",{width:1.75,height:1,depth:0.1,emissiveColor:randomColor(),diffuseColor:randomColor()});pNow=api.now()}}
+</textarea>
+<h1 class="heading">BloxCodes</h1>
+<img src="https://iili.io/CitPKI1.webp"class="head_main"></img>
+<h3 class="monitorText">Working Monitor</h3>
+<button class="monitorCopy">Copy Code</button>
+<img src="https://iili.io/CitIuG1.jpg"alt="Working Monitor"class="monitor"></img>
+<h3 class="bombText">Time Bomb</h3>
+<button class="bombCopy">Copy Code</button>
+<img src="https://iili.io/Cibdt7S.jpg"alt="Time Bomb"class="timeBomb"></img>
+<h3 class="morphText">Morph into Mobs</h3>
+<button class="morphCopy">Copy Code</button>
+<img src="https://iili.io/CiyZblS.jpg"alt="Morph into Mobs"class="morphMob"></img>
+<h3 class="lampText">RGB Lamp</h3>
+<button class="lampCopy">Copy Code</button>
+<img src="https://iili.io/Cs9Orog.jpg"alt="RGB Lamp"class="RGBLamp"></img>
+<h3 class="secretText">Chat Bubbles</h3>
+<button class="secretCopy">Copy Code</button>
+<img src="https://iili.io/CsM8OGI.jpg"alt="chatBubbles"class="secret"></img>
+<h3 class="nameText">Colorful Nametag</h3>
+<button class="nameCopy">Copy Code</button>
+<img src="https://iili.io/CsXC0Kb.jpg"alt="colorfulNametag"class="nameTag_"></img>
+<h3 class="anText">Server Announcement</h3>
+<button class="anCopy">Copy Code</button>
+<img src="https://iili.io/CtuPkMB.jpg"alt="announcement"class="announce"></img>
+<h3 class="YTText">Game Ranks</h3>
+<button class="YTCopy">Copy Code</button>
+<img src="https://iili.io/CtA1rn2.jpg"alt="gameRanks"class="ranks_"></img>
+<style>
+.monitorArea,.bombArea,.morphArea,.lampArea,.secretArea,.nameArea,.anArea,.YTarea {
+        background: linear-gradient(110deg,cyan,purple);
+        overflow: hidden;
+        display: none;
+        white-space: pre;
+        font-family: monospace;
+        resize: none;
+    }
+    .heading {
+        position: absolute;
+        color: rgb(255, 245, 206);
+        text-shadow: 0px 0px 10px black;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        top: calc(0%);
+        left: calc(42.5%);
+    }
+ .head_main {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    left: calc(50% - 170px);
+    top: 10px;
+}
+    .monitor,.timeBomb,.morphMob,.RGBLamp,.secret,.nameTag_,.announce,.ranks_ {
+        position: absolute;
+        width:240px;
+        height: 135px;
+        border: 2px black solid;
+        box-shadow: 0px 0px 5px 2px black !important;
+    }
+    .monitor {
+        bottom: calc(50% + 30px);
+        left: calc(8.5%);
+    }
+    .timeBomb {
+        bottom: calc(50% + 30px);
+        left: calc(38.5%);
+    }
+    .morphMob {
+        bottom: calc(50% + 30px);
+        left: calc(68.5%);
+    }
+    .RGBLamp {
+        bottom: calc(7% + 30px);
+        left: calc(8.5%);
+    }
+    .secret {
+        bottom: calc(7% + 30px);
+        left: calc(38.5%);
+    }
+    .nameTag_ {
+        bottom: calc(7% + 30px);
+        left: calc(68.5%);
+    }
+    .announce {
+        bottom: calc(-36% + 30px);
+        left: calc(8.5%);
+    }
+    .ranks_ {
+        bottom: calc(-36% + 30px);
+        left: calc(38.5%);
+    }
+    .monitorText,.bombText,.morphText,.lampText,.secretText,.nameText,.anText,.YTText {
+        position: absolute;
+        color: cyan;
+        text-shadow: 0px 0px 6px cyan;
+    }
+    .monitorText{
+        bottom: calc(50% - 25px);
+        left: calc(12.5%);
+    }
+    .bombText{
+        bottom: calc(50% - 25px);
+        left: calc(44.25%);
+    }
+    .morphText{
+        bottom: calc(50% - 25px);
+        left: calc(72.5%);
+    }
+    .lampText{
+        bottom: calc(7% - 25px);
+        left: calc(14.25%);
+    }
+    .secretText{
+        bottom: calc(7% - 25px);
+        left: calc(43.5%);
+    }
+    .nameText{
+        bottom: calc(7% - 25px);
+        left: calc(72.5%);
+    }
+    .anText{
+        bottom: calc(-36% - 25px);
+        left: calc(11.25%);
+    }
+    .YTText{
+        bottom: calc(-36% - 25px);
+        left: calc(43.5%);
+    }
+    .monitorCopy,.bombCopy,.morphCopy,.lampCopy,.secretCopy,.nameCopy,.anCopy,.YTCopy {
+        color:black;
+        position: absolute;
+        background: linear-gradient(140deg,cyan,purple);
+        font-weight: 20;
+        text-shadow: 0px 0px 2px black;
+        border: 1px solid black;
+        border-radius: 7.5px;
+        padding: 5px;
+        transition: transform 0.5s ease-in-out;
+    }
+    .monitorCopy {
+        bottom: calc(50% - 50px);
+        left: calc(15%);
+    }
+    .bombCopy {
+        bottom: calc(50% - 50px);
+        left: calc(45%);
+    }
+    .morphCopy {
+        bottom: calc(50% - 50px);
+        left: calc(75%);
+    }
+    .lampCopy {
+        bottom: calc(7% - 50px);
+        left: calc(15%);
+    }
+    .secretCopy {
+        bottom: calc(7% - 50px);
+        left: calc(45%);
+    }
+     .nameCopy {
+        bottom: calc(7% - 50px);
+        left: calc(75%);
+    }
+    .anCopy {
+        bottom: calc(-37% - 50px);
+        left: calc(15%);
+    }
+    .YTCopy {
+        bottom: calc(-37% - 50px);
+        left: calc(45%);
+    }
+    .monitorCopy:hover,.bombCopy:hover,.morphCopy:hover,.lampCopy:hover,.secretCopy:hover,.nameCopy:hover,.anCopy:hover,.YTCopy:hover {
+        transform: scale(1.25);
+        box-shadow: 0px 0px 5px black;
+    }
+  body {
+    margin: 0;
+    min-height: 150vh;
+    background: linear-gradient(240deg, cyan, purple);
+    overflow-x: hidden;
+}
+    .head_main:hover {
+        transform: scale(1.25);
+        transition: transform 0.75s ease-in-out;
+        box-shadow: 0px 0px 5px 2px black;
+    
+    }
+</style>
+<script>
+    document.querySelector(".head_main").onclick = function() {
+        window.open("https://www.youtube.com/@YTflameX")
+    }
+    document.querySelector(".monitorCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".monitorArea").value);
+        document.querySelector(".monitorCopy").innerHTML="Copied!";document.querySelector(".monitorCopy").style.color="lime";
+        setTimeout(()=>{
+            document.querySelector(".monitorCopy").innerHTML="Copy Code";document.querySelector(".monitorCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".bombCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".bombArea").value);
+        document.querySelector(".bombCopy").innerHTML="Copied!";document.querySelector(".bombCopy").style.color="lime";
+        setTimeout(()=>{
+            document.querySelector(".bombCopy").innerHTML="Copy Code";document.querySelector(".bombCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".morphCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".morphArea").value);
+        document.querySelector(".morphCopy").innerHTML="Copied!";document.querySelector(".morphCopy").style.color="lime";
+        setTimeout(()=>{
+            document.querySelector(".morphCopy").innerHTML="Copy Code";document.querySelector(".morphCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".lampCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".lampArea").value);
+        document.querySelector(".lampCopy").innerHTML="Copied!";document.querySelector(".lampCopy").style.color="lime";
+        setTimeout(()=>{
+            document.querySelector(".lampCopy").innerHTML="Copy Code";document.querySelector(".lampCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".secretCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".secretArea").value);
+        document.querySelector(".secretCopy").innerHTML="Copied!";document.querySelector(".secretCopy").style.color="lime";
+        setTimeout(()=>{
+            console.log(1)
+            document.querySelector(".secretCopy").innerHTML="Copy Code";document.querySelector(".secretCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".nameCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".nameArea").value);
+        document.querySelector(".nameCopy").innerHTML="Copied!";document.querySelector(".nameCopy").style.color="lime";
+        setTimeout(()=>{
+            console.log(1)
+            document.querySelector(".nameCopy").innerHTML="Copy Code";document.querySelector(".nameCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".anCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".anArea").value);
+        document.querySelector(".anCopy").innerHTML="Copied!";document.querySelector(".anCopy").style.color="lime";
+        setTimeout(()=>{
+            console.log(1)
+            document.querySelector(".anCopy").innerHTML="Copy Code";document.querySelector(".anCopy").style.color="black";
+    },2250) 
+}
+document.querySelector(".YTCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".YTarea").value);
+        document.querySelector(".YTCopy").innerHTML="Copied!";document.querySelector(".YTCopy").style.color="lime";
+        setTimeout(()=>{
+            console.log(1)
+            document.querySelector(".YTCopy").innerHTML="Copy Code";document.querySelector(".YTCopy").style.color="black";
+    },2250) 
+}
+</script>
+
