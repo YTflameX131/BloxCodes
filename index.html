@@ -1,10 +1,177 @@
 <!DOCTYPE html>
-<head>
+<!-- saved from url=(0040)https://ytflamex131.github.io/BloxCodes/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title> BloxCodes</title>
-<link rel="icon" type="image/png" href="https://iili.io/CitPKI1.webp">
+<link rel="icon" type="image/png" href="./BloxCodes_files/CitPKI1.webp">
 </head>
-<textarea class="YTarea"readonly>
-    //warning: These are Unoffical Ranks!!
+<body>
+    <textarea class="ITarea"readonly>
+       /* Code fully made by YTflameX!, only used for world,games purpose, it can't be used for making new video without crediting the owner! */
+function makeTiktok(id) {
+api.setTargetedPlayerSettingForEveryone(id,"lobbyLeaderboardTags",[[{icon:"tiktok",style:{color:"white"}}]],true)
+    api.setTargetedPlayerSettingForEveryone(
+    id,
+    "nameTagInfo",
+    {
+        content: [
+            {      
+                icon:"tiktok",
+                mainRGB: "black",
+                chatTag: [],
+            },
+            {
+                str: api.getEntityName(id),
+            },
+        ],
+    }, 
+    true,
+)
+    api.setPlayerDbValue(id,"rank","tiktok")
+}
+function makeInstagram(id) {
+    api.setTargetedPlayerSettingForEveryone(
+    id,
+    "nameTagInfo",
+    {
+        content: [
+            {      
+                icon:"tiktok",
+                mainRGB: "black",
+                chatTag: [],
+            },
+            {      
+                icon:"instagram",
+                mainRGB: "#1877F2",
+                chatTag: [],
+            },
+            {
+                str: api.getEntityName(id),
+            },
+        ],
+    }, 
+    true,
+)
+    api.setPlayerDbValue(id,"rank","instagram")
+}
+function makeBoth(id) {
+    api.setTargetedPlayerSettingForEveryone(
+    id,
+    "nameTagInfo",
+    {
+        content: [
+            {      
+                icon:"instagram",
+                mainRGB: "#1877F2",
+                chatTag: [],
+            },
+            {
+                str: api.getEntityName(id),
+            },
+        ],
+    }, 
+    true,
+)
+    api.setPlayerDbValue(id,"rank","makeBoth")
+}
+let steps = {}
+let pNow = {}
+let delay = {}
+onPlayerJoin = function(pId) {
+    steps[pId]=-1
+    delay[pId]=1000 /* in milliseconds */
+    /* if you want instagram rank then keep rank as "instagram", if you want tiktok then make it as "tiktok" if you want both then make it "makeBoth" */
+    let rank = "makeBoth" /* change here :D */
+    if (rank==="tiktok") {
+        
+        makeTiktok(pId)
+    } else if (rank==="instagram") {
+        makeInstagram(pId)
+        pNow[pId]=api.now()
+    } else if (rank==="makeBoth") {
+        makeBoth(pId);pNow[pId]=api.now()
+    }
+}
+let colors=["#405DE6","#5851DB","#833AB4","#C13584","#E1306C","#FD1D1D","#F56040","#F77737","#FCAF45","#FFDC80"];
+tick = function() {
+    for (let p of api.getPlayerIds()) {
+        let rank = api.getPlayerDbValue(p,"rank")?? "tiktok"
+        let steps1 = steps[p]
+        if (rank==="makeBoth"&&api.now()-pNow[p]>=delay[p]) {
+            if (steps[p]==9){
+                steps[p]=-1
+            }
+            steps[p]++;pNow[p]=api.now()
+            
+api.setTargetedPlayerSettingForEveryone(p,"lobbyLeaderboardTags",[[{icon:"tiktok",style:{color:"white"}},{icon:"instagram",style:{color:colors[steps[p]]}}]],true)
+              api.setTargetedPlayerSettingForEveryone(
+    p,
+    "nameTagInfo",
+    {
+        content: [
+            {      
+                icon:"tiktok",
+                mainRGB: "black",
+                chatTag: [],
+            },
+            {      
+                icon:"instagram",
+                mainRGB: colors[steps[p]],
+                chatTag: [],
+            },
+            {
+                str: api.getEntityName(p),
+            },
+        ],
+    }, 
+    true,
+)
+        } else if (rank==="instagram"&&api.now()-pNow[p]>=delay[p]) {
+            if (steps[p]==9){
+                steps[p]=-1
+            }
+            steps[p]++;pNow[p]=api.now()
+            api.setTargetedPlayerSettingForEveryone(p,"lobbyLeaderboardTags",[[{icon:"instagram",style:{color:colors[steps[p]]}}]],true)
+              api.setTargetedPlayerSettingForEveryone(
+    p,
+    "nameTagInfo",
+    {
+        content: [
+            
+            {      
+                icon:"instagram",
+                mainRGB: colors[steps[p]],
+                chatTag: [],
+            },
+            {
+                str: api.getEntityName(p),
+            },
+        ],
+    }, 
+    true,
+)
+        } else if (rank==="tiktok") {
+            api.setTargetedPlayerSettingForEveryone(p,"lobbyLeaderboardTags",[[{icon:"tiktok",style:{color:"white"}}]],true)
+            pNow[p]=api.now()
+        }
+    }
+}
+onPlayerChat = function(pId,msg) {
+    let rank = api.getPlayerDbValue(pId,"rank")??"tiktok";
+    if (rank==="tiktok") {
+        api.broadcastMessage([{str:"[",style:{color:"white",fontWeight:"bold"}},{icon:"tiktok",style:{color:"white",fontWeight:"bold"}},{str:" Tik",style:{color:"white",fontWeight:"bold"}},{str:"Toker",style:{color:"black",fontWeight:"bold"}},{str:"] ",style:{color:"white",fontWeight:"bold"}},{str:api.getEntityName(pId)+": ",style:{color:"white",fontWeight:"bold"}},{str:msg,style:{color:"white"}}])
+        return false;
+    }
+    if (rank==="instagram") {
+        api.broadcastMessage([{str:"[",style:{color:"white",fontWeight:"bold"}},{icon:"instagram",style:{color:colors[steps[pId]],fontWeight:"bold"}},{str:" Insta",style:{color:"white",fontWeight:"bold"}},{str:"Grammer",style:{color:colors[steps[pId]],fontWeight:"bold"}},{str:"] ",style:{color:"white",fontWeight:"bold"}},{str:api.getEntityName(pId)+": ",style:{color:"white",fontWeight:"bold"}},{str:msg,style:{color:"white"}}])
+        return false;
+    }
+    if (rank==="makeBoth") {
+         api.broadcastMessage([{str:"[",style:{color:"white",fontWeight:"bold"}},{icon:"tiktok",style:{color:"white",fontWeight:"bold"}},{str:" Tik",style:{color:"white",fontWeight:"bold"}},{str:"Toker",style:{color:"black",fontWeight:"bold"}},{str:"] ",style:{color:"white",fontWeight:"bold"}},{str:"[",style:{color:"white",fontWeight:"bold"}},{icon:"instagram",style:{color:colors[steps[pId]],fontWeight:"bold"}},{str:" Insta",style:{color:"white",fontWeight:"bold"}},{str:"Grammer",style:{color:colors[steps[pId]],fontWeight:"bold"}},{str:"] ",style:{color:"white",fontWeight:"bold"}},{str:api.getEntityName(pId)+": ",style:{color:"white",fontWeight:"bold"}},{str:msg,style:{color:"white"}}])
+        return false;
+    }
+}
+    </textarea>
+    <textarea class="YTarea" readonly="">    //warning: These are Unoffical Ranks!!
 //code by YTflameX
 // plz subscribe me so soon i can get orginal one soon :D
  api.setTargetedPlayerSettingForEveryone(myId, "nameTagInfo", {
@@ -48,10 +215,9 @@ let name = api.getEntityName(id);
     }
 }
 </textarea>
-<textarea class="anArea"readonly>
-    let lastAnnouncement = null;
+<textarea class="anArea" readonly="">    let lastAnnouncement = null;
 
-playerCommand = (id, msg) => {
+playerCommand = (id, msg) =&gt; {
     const playerName = api.getEntityName(id);
     const admins = ["YTflameX131", "Aura_c", "ItsBob", "x_Drxth"];
 
@@ -67,14 +233,14 @@ playerCommand = (id, msg) => {
 
     if (command === "sa") {
         if (!args.length) {
-            api.sendMessage(id, "⚠ Usage: /sa <message>", { color: "orange" });
+            api.sendMessage(id, "⚠ Usage: /sa &lt;message&gt;", { color: "orange" });
             return true;
         }
 
         const announcement = args.join(" ");
         lastAnnouncement = announcement;
 
-        api.getPlayerIds().forEach(pid => {
+        api.getPlayerIds().forEach(pid =&gt; {
             api.sendTopRightHelper(pid, "user-group-crown", "Server Announcement: " + announcement, {
                 duration: 6,
                 width: 300,
@@ -94,7 +260,7 @@ playerCommand = (id, msg) => {
     return false;
 };
 
-onPlayerJoin = (id) => {
+onPlayerJoin = (id) =&gt; {
     if (!lastAnnouncement) return;
     api.sendTopRightHelper(id, "user-group-crown", "Server Announcement: " + lastAnnouncement, {
         duration: 6,
@@ -108,14 +274,13 @@ onPlayerJoin = (id) => {
     api.playSound(id, "bass", 1, 1); // sound effect for new player
 };
 </textarea>
-<textarea class="nameArea"readonly>
-//code by YTflameX131 //
+<textarea class="nameArea" readonly="">//code by YTflameX131 //
 const DISCO_COLORS = ["white","yellow","pink","cyan","lime","red","blue","purple"];
 const RAINBOW_COLORS = ["red","orange","yellow","lime","green","cyan","blue","purple","pink"];
 
 let mode = null, idx = {}, tickCount = 0;
 
-onPlayerChat = (id, msg) => {
+onPlayerChat = (id, msg) =&gt; {
   msg = msg.trim().toLowerCase();
 
   if (msg === "!disco") {
@@ -150,7 +315,7 @@ onPlayerChat = (id, msg) => {
   }
 };
 //checkout YTflameX On yt //
-tick = () => {
+tick = () =&gt; {
   if (!mode) return;
 
   const players = api.getPlayerIds();
@@ -162,7 +327,7 @@ tick = () => {
     }
   }
 
-  if (mode === "rainbow" && ++tickCount % 2 === 0) {
+  if (mode === "rainbow" &amp;&amp; ++tickCount % 2 === 0) {
     for (let p of players) {
       idx[p] = (idx[p] || 0) + 1;
       api.setTargetedPlayerSettingForEveryone(
@@ -176,11 +341,9 @@ tick = () => {
 };
 
 </textarea>
-<textarea class="secretArea"readonly>
-    api.setClientOption(myId,"showChatBubbles",true);
+<textarea class="secretArea" readonly="">    api.setClientOption(myId,"showChatBubbles",true);
 </textarea>
-<textarea class="lampArea"readonly>
-    
+<textarea class="lampArea" readonly="">    
 /* Code Made By YTflameX, this is licensed to use anywhere, but not to copy it or make a video on it without crediting the code owner */
 let light={};let pos={};let processed={};let placed={}; let playerTiming={};let delay=500; /* in m/s */
 removeRGB = function(id) {
@@ -207,50 +370,48 @@ onPlayerJoin = function(pId) {
 }
 onPlayerClick = function(pId,alt,x,y,z) {
     if (api.getHeldItem(pId)?.attributes?.customDisplayName==="RGB Lamp Placer") {
-        if (x&&y&&z===NaN)return;
+        if (x&amp;&amp;y&amp;&amp;z===NaN)return;
         let ids=api.attemptCreateMeshEntity("BloxdBlock",{blockName:"Torch",size:0.75});api.setPosition(ids,x+0.5,y+0.5,z+0.5);pos[pId]=[x+0.5,y+1,z+0.5];light[pId]=ids;;placed[pId]=pId;processed[pId]=0;playerTiming[pId]=api.now();api.sendMessage(pId,`Placed RGB Lamp at ${pos[pId]}! Enjoy!`,{color:"lime",fontWeight:"bold"})
     }
     if (api.getHeldItem(pId)?.attributes?.customDisplayName==="RGB Lamp Remover") {
         if (light[pId]===true) {api.sendMessage(pId,"You have not placed any RGB Lamps Yet!",{color:"tomato",fontWeight:"Bold"});return}
-        if (light[pId] !==true && light[pId]!==null||undefined) {
+        if (light[pId] !==true &amp;&amp; light[pId]!==null||undefined) {
             api.sendMessage(pId,`Cleared RGB Lamp "${light[pId]}"!`,{color:"lime",fontWeight:"bold"});removeRGB(pId);processed[pId]=0;playerTiming[pId]=api.now()
         }
     }
 }
 tick = function(pId) {
     for (let p in placed) {
-        if (api.now()-playerTiming[p]>=delay) {
-            if (processed[p]>=0){processed[p]++;}
+        if (api.now()-playerTiming[p]&gt;=delay) {
+            if (processed[p]&gt;=0){processed[p]++;}
             if (processed[p]===11){processed[p]=0;}
             playerTiming[p]=api.now();api.setBlock(pos[p],lights[processed[p]])
         }
     }
 }
 </textarea>
-<textarea class="morphArea"readonly>
-    let entityAttach={};
+<textarea class="morphArea" readonly="">    let entityAttach={};
 onPlayerJoin = function(pId){api.clearInventory(pId);api.giveItem(pId,"Stick",1,{customDisplayName:"Clear All",customDescription:"Click to remove all mobs and restore back to a humanoid"})};onPlayerDamagingMob = function(pId,mobId) {if (entityAttach[pId]===mobId){return "preventDamage"}if(entityAttach[pId]){api.sendMessage(pId,"You have mob attached to yourself!",{color:"tomato",fontWeight:"bold"});return "preventDamage"}api.addFollowingEntityToPlayer(pId,mobId,[0,0,0],true);api.setOtherEntitySetting(pId,pId,"canSee",false);entityAttach[pId]=mobId;api.sendMessage(pId,`Added Entity ${entityAttach[pId]}`,{color:"orange",fontWeight:"bold"})
 };onPlayerClick = function(pId,alt,x,y,z,bn,ti) {
-if(!api.getHeldItem(pId))return;if (api.getHeldItem(pId)?.attributes?.customDisplayName==="Clear All") {if (!entityAttach[pId]){api.sendMessage(pId,"You have no Mobs Attached!",{color:"tomato",fontWeight:"bold"})}if(entityAttach[pId]) {api.sendMessage(pId,`Cleared mob ${entityAttach[pId]} & transformed back to humanoid`,{color:"lime",fontWeight:"bold"});api.despawnMob(entityAttach[pId]);api.setOtherEntitySetting(pId,pId,"canSee",true);delete entityAttach[pId]}}};onMobDamagingPlayer = function(mId,pId){if (entityAttach[pId]===mId)return "preventDamage"}
+if(!api.getHeldItem(pId))return;if (api.getHeldItem(pId)?.attributes?.customDisplayName==="Clear All") {if (!entityAttach[pId]){api.sendMessage(pId,"You have no Mobs Attached!",{color:"tomato",fontWeight:"bold"})}if(entityAttach[pId]) {api.sendMessage(pId,`Cleared mob ${entityAttach[pId]} &amp; transformed back to humanoid`,{color:"lime",fontWeight:"bold"});api.despawnMob(entityAttach[pId]);api.setOtherEntitySetting(pId,pId,"canSee",true);delete entityAttach[pId]}}};onMobDamagingPlayer = function(mId,pId){if (entityAttach[pId]===mId)return "preventDamage"}
 </textarea>
-<textarea class="bombArea" readonly>
-    let time=null;let entity=null;let started=false;let lobbyNow=api.now(); let hasTimer=false;let pos=null;let id=null;let maxVal=0; let color="lime"
+<textarea class="bombArea" readonly="">    let time=null;let entity=null;let started=false;let lobbyNow=api.now(); let hasTimer=false;let pos=null;let id=null;let maxVal=0; let color="lime"
 function createExplosion(pId) {let [x, y, z] = pos;
 api.attemptCreateThrowable(pId,"Super RPG",[x, y + 0.2, z],[0, -1, 0],50000,90,1);}
-onPlayerJoin = (pId) => {
+onPlayerJoin = (pId) =&gt; {
     api.setMaxPlayers(1,1);api.sendMessage(pId,"Warning ⚠This only works for a single player, if more than a player use the explosion then, it may break the code",{color:"tomato",fontWeight:"bold"})
     api.clearInventory(pId);api.giveItem(pId,"Timed Spike Bomb",1,{customDisplayName:"Time Bomb Placer"})
 }
-onPlayerFinishChargingItem = (pId,a,item,ms) => {
-    if (item==="Timed Spike Bomb|meta|charging4"&& ms>=2000) {
+onPlayerFinishChargingItem = (pId,a,item,ms) =&gt; {
+    if (item==="Timed Spike Bomb|meta|charging4"&amp;&amp; ms&gt;=2000) {
 let playerCam = api.getPlayerTargetInfo(pId)
         if (!playerCam) throw new Error("You can't place time bomb in the air!");
-        if (playerCam){let [x,y,z]=playerCam?.position;api.setBlock(x,y+1,z,"Timed Spike Bomb Block");api.sendMessage(pId,"Sucessfully placed time Bomb💣! Now type the time in the timer tag & click the Time Bomb with the given timer Tag!(in Seconds)",{color:"lime",fontWeight:"bold"});api.removeItemName(pId,"Timed Spike Bomb|meta|charging4",999);
+        if (playerCam){let [x,y,z]=playerCam?.position;api.setBlock(x,y+1,z,"Timed Spike Bomb Block");api.sendMessage(pId,"Sucessfully placed time Bomb💣! Now type the time in the timer tag &amp; click the Time Bomb with the given timer Tag!(in Seconds)",{color:"lime",fontWeight:"bold"});api.removeItemName(pId,"Timed Spike Bomb|meta|charging4",999);
                       let ent=api.attemptCreateMeshEntity("Box",{width:0,height:1,depth:0},"Timed Spiked Bomb");api.setPosition(ent,x+0.5,y+1,z+0.5);entity=ent;api.giveItem(pId,"Name Tag",1,{customDisplayName:"Timer Tag"});started=true;pos=[x+0.5,y+1,z+0.5];id=pId}
     }
 }
-onPlayerClick = (pId,alt,x,y,z,bn) =>{
-if (hasTimer===false&&api.getHeldItem(pId)?.name==="Name Tag"&&bn==="Timed Spike Bomb Block"&&started===true) {
+onPlayerClick = (pId,alt,x,y,z,bn) =&gt;{
+if (hasTimer===false&amp;&amp;api.getHeldItem(pId)?.name==="Name Tag"&amp;&amp;bn==="Timed Spike Bomb Block"&amp;&amp;started===true) {
     if (api.getHeldItem(pId)?.attributes?.customAttributes?.text) {
         let str = api.getHeldItem(pId)?.attributes?.customAttributes?.text
         if (/^\d+$/.test(str)) {
@@ -263,17 +424,16 @@ api.sendMessage(pId,"Please Type Numbers in the timer!",{color:"red",fontWeight:
 }
 tick = function() {
     if (hasTimer===true) {
-    if (api.now()-lobbyNow>=1000) {
+    if (api.now()-lobbyNow&gt;=1000) {
 let percent = (time / maxVal) * 100;
-if(percent > 75){color="lime"}else if(percent > 50){color="yellow"}else if(percent > 25){color="orange"}else if(percent > 0){color="red"}
+if(percent &gt; 75){color="lime"}else if(percent &gt; 50){color="yellow"}else if(percent &gt; 25){color="orange"}else if(percent &gt; 0){color="red"}
 if (time===0){hasTimer=false;;started=false;time=null;createExplosion(id);api.deleteMeshEntity(entity);entity=null;api.giveItem(id,"Timed Spike Bomb",1,{customDisplayName:"Time Bomb Placer"});id=null;api.broadcastMessage("💣The bomb has Exploded💥!",{color:"tomato",fontWeight:"bold"});return;}
             time--;lobbyNow=api.now();api.setTargetedPlayerSettingForEveryone(entity,"nameTagInfo",{content:[{str: `${time}s`}],backgroundColor:color})
         }
     }
 }
 </textarea>
-<textarea class="monitorArea" readonly>
-    let screenMain;let position;let screenP=false;let pNow=api.now()
+<textarea class="monitorArea" readonly="">    let screenMain;let position;let screenP=false;let pNow=api.now()
 onPlayerJoin = function(pId) {
     api.clearInventory(pId)
     api.giveItem(pId,"Bone",1,{customDisplayName:"Monitor Placer"})
@@ -304,37 +464,40 @@ api.addFollowingEntityToPlayer(base, rod4, [0, 0.425, 0]);;
         
     }}
 tick = function(pId) {
-    if (api.now()-pNow>=1000&&screenP===true) {
+    if (api.now()-pNow&gt;=1000&amp;&amp;screenP===true) {
     api.updateMeshEntity(screenMain,"Box",{width:1.75,height:1,depth:0.1,emissiveColor:randomColor(),diffuseColor:randomColor()});pNow=api.now()}}
 </textarea>
 <h1 class="heading">BloxCodes</h1>
-<img src="https://iili.io/CitPKI1.webp"class="head_main"></img>
+<img src="./BloxCodes_files/CitPKI1.webp" class="head_main">
 <h3 class="monitorText">Working Monitor</h3>
 <button class="monitorCopy">Copy Code</button>
-<img src="https://iili.io/CitIuG1.jpg"alt="Working Monitor"class="monitor"></img>
+<img src="./BloxCodes_files/CitIuG1.jpg" alt="Working Monitor" class="monitor">
 <h3 class="bombText">Time Bomb</h3>
 <button class="bombCopy">Copy Code</button>
-<img src="https://iili.io/Cibdt7S.jpg"alt="Time Bomb"class="timeBomb"></img>
+<img src="./BloxCodes_files/Cibdt7S.jpg" alt="Time Bomb" class="timeBomb">
 <h3 class="morphText">Morph into Mobs</h3>
 <button class="morphCopy">Copy Code</button>
-<img src="https://iili.io/CiyZblS.jpg"alt="Morph into Mobs"class="morphMob"></img>
+<img src="./BloxCodes_files/CiyZblS.jpg" alt="Morph into Mobs" class="morphMob">
 <h3 class="lampText">RGB Lamp</h3>
 <button class="lampCopy">Copy Code</button>
-<img src="https://iili.io/Cs9Orog.jpg"alt="RGB Lamp"class="RGBLamp"></img>
+<img src="./BloxCodes_files/Cs9Orog.jpg" alt="RGB Lamp" class="RGBLamp">
 <h3 class="secretText">Chat Bubbles</h3>
 <button class="secretCopy">Copy Code</button>
-<img src="https://iili.io/CsM8OGI.jpg"alt="chatBubbles"class="secret"></img>
+<img src="./BloxCodes_files/CsM8OGI.jpg" alt="chatBubbles" class="secret">
 <h3 class="nameText">Colorful Nametag</h3>
 <button class="nameCopy">Copy Code</button>
-<img src="https://iili.io/CsXC0Kb.jpg"alt="colorfulNametag"class="nameTag_"></img>
+<img src="./BloxCodes_files/CsXC0Kb.jpg" alt="colorfulNametag" class="nameTag_">
 <h3 class="anText">Server Announcement</h3>
 <button class="anCopy">Copy Code</button>
-<img src="https://iili.io/CtuPkMB.jpg"alt="announcement"class="announce"></img>
+<img src="./BloxCodes_files/CtuPkMB.jpg" alt="announcement" class="announce">
 <h3 class="YTText">Game Ranks</h3>
 <button class="YTCopy">Copy Code</button>
-<img src="https://iili.io/CtA1rn2.jpg"alt="gameRanks"class="ranks_"></img>
+<img src="./BloxCodes_files/CtA1rn2.jpg" alt="gameRanks" class="ranks_">
+<img src="https://iili.io/nqwzGUv.png" alt="InstaRank" class="ITrank">
+<h3 class="ITText">Instagram & Tiktok Ranks</h3>
+<button class="ITCopy">Copy Code</button>
 <style>
-.monitorArea,.bombArea,.morphArea,.lampArea,.secretArea,.nameArea,.anArea,.YTarea {
+.monitorArea,.bombArea,.morphArea,.lampArea,.secretArea,.nameArea,.anArea,.YTarea,.ITarea {
         background: linear-gradient(110deg,cyan,purple);
         overflow: hidden;
         display: none;
@@ -357,7 +520,7 @@ tick = function(pId) {
     left: calc(50% - 170px);
     top: 10px;
 }
-    .monitor,.timeBomb,.morphMob,.RGBLamp,.secret,.nameTag_,.announce,.ranks_ {
+    .monitor,.timeBomb,.morphMob,.RGBLamp,.secret,.nameTag_,.announce,.ranks_,.ITrank {
         position: absolute;
         width:240px;
         height: 135px;
@@ -396,7 +559,11 @@ tick = function(pId) {
         bottom: calc(-36% + 30px);
         left: calc(38.5%);
     }
-    .monitorText,.bombText,.morphText,.lampText,.secretText,.nameText,.anText,.YTText {
+    .ITrank {
+        bottom: calc(-36% + 30px);
+        left: calc(68.5%);
+    }
+    .monitorText,.bombText,.morphText,.lampText,.secretText,.nameText,.anText,.YTText,.ITText {
         position: absolute;
         color: cyan;
         text-shadow: 0px 0px 6px cyan;
@@ -433,7 +600,11 @@ tick = function(pId) {
         bottom: calc(-36% - 25px);
         left: calc(43.5%);
     }
-    .monitorCopy,.bombCopy,.morphCopy,.lampCopy,.secretCopy,.nameCopy,.anCopy,.YTCopy {
+    .ITText{
+        bottom: calc(-36% - 25px);
+        left: calc(69.25%);
+    }
+    .monitorCopy,.bombCopy,.morphCopy,.lampCopy,.secretCopy,.nameCopy,.anCopy,.YTCopy,.ITCopy {
         color:black;
         position: absolute;
         background: linear-gradient(140deg,cyan,purple);
@@ -476,7 +647,11 @@ tick = function(pId) {
         bottom: calc(-37% - 50px);
         left: calc(45%);
     }
-    .monitorCopy:hover,.bombCopy:hover,.morphCopy:hover,.lampCopy:hover,.secretCopy:hover,.nameCopy:hover,.anCopy:hover,.YTCopy:hover {
+    .ITCopy {
+        bottom: calc(-37% - 50px);
+        left: calc(75%);
+    }
+    .monitorCopy:hover,.bombCopy:hover,.morphCopy:hover,.lampCopy:hover,.secretCopy:hover,.nameCopy:hover,.anCopy:hover,.YTCopy:hover,.ITCopy:hover {
         transform: scale(1.25);
         box-shadow: 0px 0px 5px black;
     }
@@ -557,5 +732,13 @@ document.querySelector(".YTCopy").onclick = async function() {
             document.querySelector(".YTCopy").innerHTML="Copy Code";document.querySelector(".YTCopy").style.color="black";
     },2250) 
 }
+document.querySelector(".ITCopy").onclick = async function() {
+        await navigator.clipboard.writeText(document.querySelector(".ITarea").value);
+        document.querySelector(".ITCopy").innerHTML="Copied!";document.querySelector(".ITCopy").style.color="lime";
+        setTimeout(()=>{
+            document.querySelector(".ITCopy").innerHTML="Copy Code";document.querySelector(".ITCopy").style.color="black";
+    },2250) 
+}
 </script>
 
+</body></html>
